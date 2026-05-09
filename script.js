@@ -1,40 +1,34 @@
-const gameBoard = document.getElementById("game-board");
-const restartBtn = document.getElementById("restart-btn");
+const gameBoard = document.getElementById("gameBoard");
+const restartBtn = document.getElementById("restartBtn");
 
 const emojis = ["🍎", "🍌", "🍇", "🍒", "🍉", "🥝"];
 
-let cardsArray = [...emojis, ...emojis];
-
+let shuffledCards = [];
 let firstCard = null;
 let secondCard = null;
-
 let lockBoard = false;
-
 let matchedPairs = 0;
 
-// Shuffle cards randomly
 function shuffleCards() {
-  cardsArray.sort(() => Math.random() - 0.5);
+  shuffledCards = [...emojis, ...emojis]
+    .sort(() => Math.random() - 0.5);
 }
 
-// Create game board
 function createBoard() {
-
   gameBoard.innerHTML = "";
 
-  matchedPairs = 0;
-
-  shuffleCards();
-
-  cardsArray.forEach((emoji) => {
-
+  shuffledCards.forEach((emoji, index) => {
     const card = document.createElement("div");
-
-    card.classList.add("card", "hidden");
-
+    card.classList.add("card");
     card.dataset.emoji = emoji;
+    card.dataset.index = index;
 
-    card.innerHTML = emoji;
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="card-front">?</div>
+        <div class="card-back">${emoji}</div>
+      </div>
+    `;
 
     card.addEventListener("click", flipCard);
 
@@ -42,23 +36,15 @@ function createBoard() {
   });
 }
 
-// Handle card flip
 function flipCard() {
+  if (lockBoard) return;
 
-  if (
-    lockBoard ||
-    this === firstCard ||
-    this.classList.contains("matched")
-  ) {
-    return;
-  }
+  if (this === firstCard) return;
 
-  this.classList.remove("hidden");
+  this.classList.add("flipped");
 
   if (!firstCard) {
-
     firstCard = this;
-
     return;
   }
 
@@ -67,70 +53,55 @@ function flipCard() {
   checkMatch();
 }
 
-// Check if cards match
 function checkMatch() {
-
   const isMatch =
     firstCard.dataset.emoji === secondCard.dataset.emoji;
 
   if (isMatch) {
-
-    firstCard.classList.add("matched");
-
-    secondCard.classList.add("matched");
-
+    disableCards();
     matchedPairs++;
 
-    resetTurn();
-
-    checkWin();
-
+    if (matchedPairs === emojis.length) {
+      setTimeout(() => {
+        alert("Congratulations! You matched all cards!");
+      }, 500);
+    }
   } else {
-
-    lockBoard = true;
-
-    setTimeout(() => {
-
-      firstCard.classList.add("hidden");
-
-      secondCard.classList.add("hidden");
-
-      resetTurn();
-
-    }, 1000);
+    unflipCards();
   }
 }
 
-// Reset selected cards
-function resetTurn() {
+function disableCards() {
+  firstCard.removeEventListener("click", flipCard);
+  secondCard.removeEventListener("click", flipCard);
 
-  firstCard = null;
+  resetBoard();
+}
 
-  secondCard = null;
+function unflipCards() {
+  lockBoard = true;
 
+  setTimeout(() => {
+    firstCard.classList.remove("flipped");
+    secondCard.classList.remove("flipped");
+
+    resetBoard();
+  }, 1000);
+}
+
+function resetBoard() {
+  [firstCard, secondCard] = [null, null];
   lockBoard = false;
 }
 
-// Check win condition
-function checkWin() {
-
-  if (matchedPairs === emojis.length) {
-
-    setTimeout(() => {
-
-      alert("🎉 Congratulations! You won the game!");
-
-    }, 300);
-  }
+function restartGame() {
+  matchedPairs = 0;
+  resetBoard();
+  shuffleCards();
+  createBoard();
 }
 
-// Restart game
-restartBtn.addEventListener("click", () => {
+restartBtn.addEventListener("click", restartGame);
 
-  resetTurn();
-
-  createBoard();
-});
-
-// Start game
+shuffleCards();
 createBoard();
