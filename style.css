@@ -1,93 +1,96 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
 }
 
-body {
-  background: #0f172a;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  color: white;
+body{
+  background:#08142b;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
 }
 
-.container {
-  width: 90%;
-  max-width: 900px;
+.container{
+  width:90%;
+  max-width:900px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
 }
 
-button {
-  padding: 10px 20px;
-  border: none;
-  background: #ff4d4d;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
+.header h1{
+  font-size:50px;
 }
 
-.game-board {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+#restartBtn{
+  background:#ff5a5a;
+  border:none;
+  padding:12px 20px;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:16px;
 }
 
-.card {
-  width: 100%;
-  height: 120px;
-  perspective: 1000px;
-  cursor: pointer;
+.game-board{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
 }
 
-.card-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
+.card{
+  height:140px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.6s;
+  cursor:pointer;
 }
 
-.card.flipped .card-inner {
-  transform: rotateY(180deg);
+.card.flipped{
+  transform:rotateY(180deg);
 }
 
-.card-front,
-.card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
-  backface-visibility: hidden;
+.front,
+.back{
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:50px;
+  backface-visibility:hidden;
 }
 
-.card-front {
-  background: #1e293b;
+.front{
+  background:#1e293b;
 }
 
-.card-back {
-  background: #334155;
-  transform: rotateY(180deg);
+.back{
+  background:#334155;
+  transform:rotateY(180deg);
 }
 
-@media (max-width: 600px) {
-  .game-board {
-    grid-template-columns: repeat(3, 1fr);
+@media(max-width:768px){
+
+  .game-board{
+    grid-template-columns:repeat(3,1fr);
   }
 
-  .card {
-    height: 100px;
+  .card{
+    height:110px;
+  }
+
+  .header h1{
+    font-size:35px;
   }
 }
